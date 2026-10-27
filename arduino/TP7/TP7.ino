@@ -31,24 +31,37 @@ void loop() {
   estadoE1 = !digitalRead(pinE1);
   estadoE2 = !digitalRead(pinE2);
 
-  // 2. ENVIAR DATOS A PROCESSING
+  // 2. ACCIONAR LOS LEDS LOCALMENTE SEGÚN EL PULSADOR
+  // Si apretás el pulsador 1, prende el LED 1 automáticamente
+  if (estadoE1 == HIGH) {
+    digitalWrite(pinL1, HIGH);
+  } else {
+    digitalWrite(pinL1, LOW);
+  }
+
+  // Si apretás el pulsador 2, prende el LED 2 automáticamente
+  if (estadoE2 == HIGH) {
+    digitalWrite(pinL2, HIGH);
+  } else {
+    digitalWrite(pinL2, LOW);
+  }
+
+  // 3. ENVIAR DATOS A PROCESSING (O al Monitor Serie)
   Serial.print("E1:");
   Serial.print(estadoE1);
   Serial.print(",E2:");
   Serial.println(estadoE2);
 
-  // 3. LEER COMANDOS DESDE LA PC (PROCESSING)
+  // 4. LEER COMANDOS DESDE LA PC (POR SI USÁS PROCESSING DESPUÉS)
   if (Serial.available() > 0) {
     char comando = Serial.read();
     
-    // Control de L1
     if (comando == 'A') {
       digitalWrite(pinL1, HIGH);
     } else if (comando == 'a') {
       digitalWrite(pinL1, LOW);
     }
     
-    // Control de L2
     if (comando == 'B') {
       digitalWrite(pinL2, HIGH);
     } else if (comando == 'b') {
@@ -56,6 +69,6 @@ void loop() {
     }
   }
 
-  // Pequeña pausa para no saturar el buffer serial
-  delay(100);
+  // Pequeña pausa para estabilidad
+  delay(50);
 }
